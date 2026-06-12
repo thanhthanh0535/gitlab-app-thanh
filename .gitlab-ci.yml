@@ -26,7 +26,6 @@ test_npm:
 unit_tests:
   image: node:22-alpine
   stage: unit
-  scripts:
+  script:
     - npm ci
     - npm test
-    
