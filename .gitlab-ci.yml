@@ -2,7 +2,7 @@ stages:
   - build
   - test
 
-test_npm:
+build_npm:
   image: node:22-alpine
   stage: build
   script:
