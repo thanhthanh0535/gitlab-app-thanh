@@ -1,0 +1,5 @@
+test_npm:
+  image: alpine
+  script:
+    - node --version
+    - npm --version
