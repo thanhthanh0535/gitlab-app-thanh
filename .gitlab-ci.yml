@@ -7,7 +7,10 @@ test_npm:
   script:
     - node --version
     - npm --version
-    - ls -la
+    #- ls -la #list cmt
     - npm ci # same "npm install" but npm ci faster n using package json
     - npm run build 
-    - ls -la
+    #- ls -la
+  artifacts:
+    paths:
+      - build/
