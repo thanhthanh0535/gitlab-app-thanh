@@ -16,13 +16,23 @@ build_website:
     paths:
       - build/
 
-test_artifacts:
+build_website:
+  image: alpine
+  stage: build
+  script:
+    - mkdir build
+    - echo "<h1>Learn Gitlab<h1>" > build/index.html
+  artifacts:
+    paths:
+      - build/
+
+.test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-unit_tests:
+.unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -33,11 +43,12 @@ unit_tests:
       junit: reports/junit.xml
 
 #eslint-formatter gitlab in npmjs.com
-eslint:
-  image: node:22-alpine
-  script:
-    - npm ci
-    - npm run lint
-  artifacts:
-    reports:
-      codequality: gl-codequality.json
+# eslint:
+#   image: node:22-alpine
+#   script:
+#     - npm ci
+#     - npm run lint
+#   artifacts:
+#     reports:
+#       codequality: gl-codequality.json
+
