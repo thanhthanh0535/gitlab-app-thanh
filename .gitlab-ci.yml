@@ -31,3 +31,13 @@ unit_tests:
   artifacts:
     reports:
       junit: reports/junit.xml
+
+#eslint-formatter gitlab in npmjs.com
+eslint:
+  image: node:22-alpine
+  script:
+    - npm ci
+    - npm run lint
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
