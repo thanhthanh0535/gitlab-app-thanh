@@ -1,6 +1,11 @@
+# default:
+#   before_script:
+#   - echo "This is executed in all job"
+
 stages:
   - build
   - test
+  - deploy
 
 build_website:
   image: node:22-alpine
@@ -10,21 +15,20 @@ build_website:
     - npm --version
     #- ls -la #list cmt
     - npm ci # same "npm install" but npm ci faster n using package json
-    - npm run build 
-    #- ls -la
+    - npm run build
   artifacts:
     paths:
       - build/
 
-build_website:
-  image: alpine
-  stage: build
-  script:
-    - mkdir build
-    - echo "<h1>Learn Gitlab<h1>" > build/index.html
-  artifacts:
-    paths:
-      - build/
+# build_website:
+#   image: alpine
+#   stage: build
+#   script:
+#     - mkdir build
+#     - echo "<h1>Learn Gitlab<h1>" > build/index.html
+#   artifacts:
+#     paths:
+#       - build/
 
 .test_artifacts:
   image: alpine
@@ -52,3 +56,24 @@ build_website:
 #     reports:
 #       codequality: gl-codequality.json
 
+netlify:
+  image: node:22-alpine
+  stage: deploy
+  # rules:
+  #   - if: $CI_COMMIT_REF_NAME == 'main'
+  variables:
+    NETLIFY_SITE_ID: 'a9ec3eec-064d-4c2d-b4b2-b82b77f8fae2'
+  # before_script:
+  #   - npm install -g netlify-cli
+  #   - apk add curl 
+  script:
+    - apk add --no-cache bash
+    - npm install netlify-cli --save-dev -g
+    - npm ci
+    - netlify --version
+    - netlify status
+    - echo "Deploy to site id $NETLIFY_SITE_ID"
+    - echo "Token is $NETLIFY_AUTH_TOKEN"
+    - netlify deploy --prod --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
+    - apk add curl
+    - curl 'https://learn-gitlab-thanh.netlify.app' | grep 'GitLab'
