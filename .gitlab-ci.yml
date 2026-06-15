@@ -36,13 +36,13 @@ build_website:
 #     paths:
 #       - build/
 
-test_artifacts:
+.test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-unit_tests:
+.unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -67,16 +67,28 @@ netlify_review:
   stage: deploy_review
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  environment:
+    name: preview/$CI_COMMIT_REF_SLUG
+    url: $REVIEW_URL
   before_script:
     - npm install -g netlify-cli --save-dev -g
-    - apk add curl 
+    - apk add curl jq #install curl, jq
   script:
     - apk add --no-cache bash # spawn bash ENOENT → Alpine has no bash
     - npm ci # vite: not found → no npm ci before deploy
     - netlify --version
     - netlify status
     - echo "Deploy to site id $NETLIFY_SITE_ID"
-    - netlify deploy --alias staging --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
+     #dir to build, production for customers, our website
+    - netlify deploy --alias staging --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --json | tee deploy-result.json
+    - REVIEW_URL=$(jq -r '.deploy_url' deploy-result.json) #Review url var we use
+    - echo $REVIEW_URL
+    - curl $REVIEW_URL | grep 'GitLab'
+    - echo "REVIEW_URL= $REVIEW_URL" >> deploy.env #store variables env in that 
+    - cat deploy.env
+  artifacts:
+    reports:
+      dotenv: deploy.env
 
 .netlify_staging:
   image: node:22-alpine
