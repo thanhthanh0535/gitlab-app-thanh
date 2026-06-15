@@ -1,7 +1,6 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+default:
+  before_script:
+  - echo "This is executed in all job"
 
 variables:
     NETLIFY_SITE_ID: 'a9ec3eec-064d-4c2d-b4b2-b82b77f8fae2'
@@ -9,7 +8,6 @@ variables:
 stages:
   - build
   - test
-  - deploy_review
   - deploy_staging
   - deploy_prod
 
@@ -62,23 +60,7 @@ unit_tests:
 #     reports:
 #       codequality: gl-codequality.json
 
-netlify_review:
-  image: node:22-alpine
-  stage: deploy_review
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-  before_script:
-    - npm install -g netlify-cli --save-dev -g
-    - apk add curl 
-  script:
-    - apk add --no-cache bash # spawn bash ENOENT → Alpine has no bash
-    - npm ci # vite: not found → no npm ci before deploy
-    - netlify --version
-    - netlify status
-    - echo "Deploy to site id $NETLIFY_SITE_ID"
-    - netlify deploy --alias staging --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
-
-.netlify_staging:
+netlify_staging:
   image: node:22-alpine
   stage: deploy_staging
   rules:
@@ -96,7 +78,7 @@ netlify_review:
     - netlify deploy --alias staging --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
     - curl 'https://staging--learn-gitlab-thanh.netlify.app' | grep 'GitLab'
 
-.netlify_prod:
+netlify_prod:
   image: node:22-alpine
   stage: deploy_prod
   rules:
