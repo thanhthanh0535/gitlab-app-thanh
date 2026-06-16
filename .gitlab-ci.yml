@@ -62,7 +62,7 @@ build_website:
 #     reports:
 #       codequality: gl-codequality.json
 
-netlify_review:
+.netlify_review:
   image: node:22-alpine
   stage: deploy_review
   rules:
@@ -90,11 +90,14 @@ netlify_review:
     reports:
       dotenv: deploy.env
 
-.netlify_staging:
+netlify_staging:
   image: node:22-alpine
   stage: deploy_staging
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  environment:
+    name: staging
+    url: 'https://staging--learn-gitlab-thanh.netlify.app'
   before_script:
     - npm install -g netlify-cli --save-dev -g
     - apk add curl 
@@ -106,13 +109,15 @@ netlify_review:
     - echo "Deploy to site id $NETLIFY_SITE_ID"
     - echo "Token is $NETLIFY_AUTH_TOKEN"
     - netlify deploy --alias staging --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
-    - curl 'https://staging--learn-gitlab-thanh.netlify.app' | grep 'GitLab'
+    - echo $CI_ENVIRONMENT_URL
+    - curl $CI_ENVIRONMENT_URL | grep 'GitLab'
 
-.netlify_prod:
+netlify_prod:
   image: node:22-alpine
   stage: deploy_prod
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  environment: production
   before_script:
     - npm install -g netlify-cli --save-dev -g
     - apk add curl 
@@ -124,4 +129,4 @@ netlify_review:
     - echo "Deploy to site id $NETLIFY_SITE_ID"
     - echo "Token is $NETLIFY_AUTH_TOKEN"
     - netlify deploy --prod --dir build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID #dir to build, production for customers, our website
-    - curl 'https://learn-gitlab-thanh.netlify.app' | grep 'GitLab'
+    - curl $CI_ENVIRONMENT_URL | grep 'GitLab'
