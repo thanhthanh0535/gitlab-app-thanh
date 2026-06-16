@@ -10,6 +10,7 @@ stages:
   - build
   - test
   - deploy_review
+  - post_deploy_review
   - deploy_staging
   - deploy_prod
 
@@ -90,7 +91,22 @@ netlify_review:
     reports:
       dotenv: deploy.env
 
-netlify_staging:
+e2e:
+  stage: post_deploy_review
+  #noble : linux ubuntu, container registry by microsoft
+  image: mcr.microsoft.com/playwright:v1.49.1-noble 
+  variables:
+    APP_BASE_URL: $REVIEW_URL
+  script:
+    - npm ci
+    - npm run e2e
+  artifacts:
+    paths:
+    - reports/
+    reports:
+      junit: reports/playwright-junit.xml #found it on playwright.config file
+
+.netlify_staging:
   image: node:22-alpine
   stage: deploy_staging
   rules:
@@ -112,7 +128,7 @@ netlify_staging:
     - echo $CI_ENVIRONMENT_URL
     - curl $CI_ENVIRONMENT_URL | grep 'GitLab'
 
-netlify_prod:
+.netlify_prod:
   image: node:22-alpine
   stage: deploy_prod
   rules:
