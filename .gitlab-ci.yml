@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 variables:
@@ -36,13 +36,13 @@ build_website:
 #     paths:
 #       - build/
 
-.test_artifacts:
+test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-.unit_tests:
+unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -84,7 +84,7 @@ netlify_review:
     - REVIEW_URL=$(jq -r '.deploy_url' deploy-result.json) #Review url var we use
     - echo $REVIEW_URL
     - curl $REVIEW_URL | grep 'GitLab'
-    - echo "REVIEW_URL= $REVIEW_URL" >> deploy.env #store variables env in that 
+    - echo "REVIEW_URL= $REVIEW_URL" >> deploy.env #store variables env in that!
     - cat deploy.env
   artifacts:
     reports:
