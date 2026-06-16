@@ -37,13 +37,13 @@ build_website:
 #     paths:
 #       - build/
 
-test_artifacts:
+.test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-unit_tests:
+.unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -98,7 +98,7 @@ e2e:
     APP_BASE_URL: 'https://staging--learn-gitlab-thanh.netlify.app'
   script:
     - npm ci
-    - npm e2e run
+    - npm run e2e
 
 e2e:
   stage: post_deploy_review
