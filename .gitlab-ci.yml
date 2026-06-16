@@ -101,6 +101,8 @@ e2e:
     - npm ci
     - npm run e2e
   artifacts:
+    paths:
+    - reports/
     reports:
       junit: reports/playwright-junit.xml #found it on playwright.config file
 
