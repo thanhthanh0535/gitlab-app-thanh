@@ -93,7 +93,7 @@ netlify_review:
 e2e:
   stage: .pre
   #noble : linux ubuntu, container registry by microsoft
-  image: mcr.microsoft.com/playwright:v1.61.0-noble 
+  image: mcr.microsoft.com/playwright:v1.49.1-noble 
   variables:
     APP_BASE_URL: 'https://staging--learn-gitlab-thanh.netlify.app'
   script:
