@@ -5,7 +5,7 @@ workflow:
 
 variables:
     NETLIFY_SITE_ID: 'a9ec3eec-064d-4c2d-b4b2-b82b77f8fae2'
-    VITE_APP_VERSION: $CI_COMMIT_SHORT_SHA
+    VITE_APP_VERSION: $CI_COMMIT_SHORT_SHA #
 
 stages:
   - build
