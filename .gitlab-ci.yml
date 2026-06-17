@@ -107,7 +107,7 @@ e2e:
     reports:
       junit: reports/playwright-junit.xml #found it on playwright.config file
 
-netlify_staging:
+.netlify_staging:
   image: node:22-alpine
   stage: deploy_staging
   rules:
