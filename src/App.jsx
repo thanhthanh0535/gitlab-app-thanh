@@ -35,7 +35,7 @@ function App() {
         Created by Valentin Despa. 
       </p>
       <p className="read-the-docs">
-        Application version: 1
+        Application version: {import.meta.env.VITE_APP_VERSION}
       </p>
     </>
   )

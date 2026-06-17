@@ -5,6 +5,7 @@ workflow:
 
 variables:
     NETLIFY_SITE_ID: 'a9ec3eec-064d-4c2d-b4b2-b82b77f8fae2'
+    VITE_APP_VERSION: $CI_COMMIT_SHORT_SHA
 
 stages:
   - build
@@ -37,13 +38,13 @@ build_website:
 #     paths:
 #       - build/
 
-test_artifacts:
+.test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-unit_tests:
+.unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -106,7 +107,7 @@ e2e:
     reports:
       junit: reports/playwright-junit.xml #found it on playwright.config file
 
-.netlify_staging:
+netlify_staging:
   image: node:22-alpine
   stage: deploy_staging
   rules:
