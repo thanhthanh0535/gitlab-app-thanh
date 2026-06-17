@@ -38,13 +38,13 @@ build_website:
 #     paths:
 #       - build/
 
-.test_artifacts:
+test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-.unit_tests:
+unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -129,7 +129,7 @@ netlify_staging:
     - echo $CI_ENVIRONMENT_URL
     - curl $CI_ENVIRONMENT_URL | grep 'GitLab'
 
-.netlify_prod:
+netlify_prod:
   image: node:22-alpine
   stage: deploy_prod
   rules:
