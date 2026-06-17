@@ -99,6 +99,7 @@ e2e:
   variables:
     APP_BASE_URL: $REVIEW_URL
   script:
+    - echo "APP_BASE_URL is $APP_BASE_URL"
     - npm ci
     - npm run e2e
   artifacts:
