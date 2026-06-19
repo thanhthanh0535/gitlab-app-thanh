@@ -24,9 +24,9 @@ build_docker_netlify:
   script:
     - docker version
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY #read pw in standard input, not gonna provide it here as a flag
-    - docker build -t $CI_REGISTRY_IMAGE/netlify -f ci/Dockerfile . #dot mean refer context, refer to current dir
+    - docker build -t $CI_REGISTRY_IMAGE/netlify@26.1.0 -f ci/Dockerfile . #dot mean refer context, refer to current dir
     - docker image ls
-    - docker push $CI_REGISTRY_IMAGE/netlify #where we need to push img, steps, fully qualified name
+    - docker push $CI_REGISTRY_IMAGE/netlify@26.1.0 #where we need to push img, steps, fully qualified name
 
 build_website:
   image: node:22-alpine
