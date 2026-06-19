@@ -22,8 +22,8 @@ build_docker_netlify:
   services:
     - docker:29-dind #docker deamon, cli connect over network
   script:
-    - docker --version
     - docker version
+    - echo $CI_REGISTRY_PASSWORD | docker login -u CI_REGISTRY_USER --password-stdin $CI_REGISTRY #read pw in standard input, not gonna provide it here as a flag
     - docker build -t netlify -f ci/Dockerfile . #refer context, refer to current dir
     - docker image ls
 
