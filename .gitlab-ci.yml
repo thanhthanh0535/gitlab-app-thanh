@@ -9,11 +9,12 @@ variables:
 
 stages:
   - build
-  - test
-  - deploy_review
-  - post_deploy_review
-  - deploy_staging
-  - deploy_prod
+  - deploy
+  # - test
+  # - deploy_review
+  # - post_deploy_review
+  # - deploy_staging
+  # - deploy_prod
 
 build_website:
   image: node:22-alpine
@@ -38,13 +39,13 @@ build_website:
 #     paths:
 #       - build/
 
-test_artifacts:
+.test_artifacts:
   image: alpine
   stage: test
   script:
     - test -f build/index.html
 
-unit_tests:
+.unit_tests:
   image: node:22-alpine
   stage: test
   script:
@@ -64,7 +65,7 @@ unit_tests:
 #     reports:
 #       codequality: gl-codequality.json
 
-netlify_review:
+.netlify_review:
   image: node:22-alpine
   stage: deploy_review
   rules:
@@ -92,7 +93,7 @@ netlify_review:
     reports:
       dotenv: deploy.env
 
-e2e:
+.e2e:
   stage: post_deploy_review
   #noble : linux ubuntu, container registry by microsoft
   image: mcr.microsoft.com/playwright:v1.49.1-noble
@@ -134,7 +135,7 @@ e2e:
 
 netlify_prod:
   image: node:22-alpine
-  stage: deploy_prod
+  stage: deploy
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   environment: production
