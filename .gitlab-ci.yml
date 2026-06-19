@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 variables:
@@ -16,11 +16,7 @@ stages:
   # - deploy_staging
   # - deploy_prod
 
-<<<<<<< HEAD
 test_docker:
-=======
-test-docker:
->>>>>>> 04c3c5b (update docker)
   stage: .pre
   image: docker
   script:
