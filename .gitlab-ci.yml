@@ -20,7 +20,7 @@ test_docker:
   stage: .pre
   image: docker #docker network connect 
   services:
-    - docker: dind #docker deamon, cli connect over network
+    - docker:dind #docker deamon, cli connect over network
   script:
     - docker --version
     - docker version
