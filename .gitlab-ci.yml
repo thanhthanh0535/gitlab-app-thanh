@@ -16,7 +16,11 @@ stages:
   # - deploy_staging
   # - deploy_prod
 
+<<<<<<< HEAD
 test_docker:
+=======
+test-docker:
+>>>>>>> 04c3c5b (update docker)
   stage: .pre
   image: docker
   script:
