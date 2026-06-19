@@ -18,7 +18,9 @@ stages:
 
 build_docker_netlify:
   stage: .pre
-  image: docker:29 #docker network connect 
+  image: docker:29 #docker network connect
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
   services:
     - docker:29-dind #docker deamon, cli connect over network
   script:
