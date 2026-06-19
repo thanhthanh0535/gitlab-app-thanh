@@ -146,14 +146,15 @@ build_website:
     - curl $CI_ENVIRONMENT_URL | grep 'GitLab'
 
 netlify_prod:
-  image: node:22-alpine
+  image: registry.gitlab.com/thanhthanh0535/learn-gitlab-app-thanh/netlify:latest
   stage: deploy
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   environment: production
-  before_script:
-    - npm install -g netlify-cli --save-dev -g
-    - apk add curl 
+  # no need before script cause we use docker registry into the image
+  # before_script:
+  #   - npm install -g netlify-cli --save-dev -g
+  #   - apk add curl 
   script:
     - apk add --no-cache bash # spawn bash ENOENT → Alpine has no bash
     - npm ci # vite: not found → no npm ci before deploy
