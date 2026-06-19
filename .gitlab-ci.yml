@@ -16,6 +16,13 @@ stages:
   # - deploy_staging
   # - deploy_prod
 
+test_docker:
+  stage: .pre
+  image: docker
+  script:
+    - docker --version
+    - docker version
+
 build_website:
   image: node:22-alpine
   stage: build
