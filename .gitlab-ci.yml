@@ -16,14 +16,16 @@ stages:
   # - deploy_staging
   # - deploy_prod
 
-test_docker:
+build_docker_netlify:
   stage: .pre
-  image: docker #docker network connect 
+  image: docker:29 #docker network connect 
   services:
-    - docker:dind #docker deamon, cli connect over network
+    - docker:29-dind #docker deamon, cli connect over network
   script:
     - docker --version
     - docker version
+    - docker build -t netlify -f ci/Dockerfile . #refer context, refer to current dir
+    - docker image ls
 
 build_website:
   image: node:22-alpine
